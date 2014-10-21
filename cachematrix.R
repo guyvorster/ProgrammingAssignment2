@@ -1,17 +1,20 @@
-## Put comments here that give an overall description of what your
-## functions do
+#these two functions form part of assignment 2 in the R course and are used as a means
+#to teach lexical scoping.  
 
-## Write a short comment describing this function
-
+#makeCacheMatrix takes a matrix as input and returns a function as output.
+#This function allows the calling environment to execute "methods" on the function
+#to perform tasks such as returning the matrix that was passed in, returning the inverted matrix
+#and setting data.
 makeCacheMatrix <- function(x = matrix()) 
-{
-        
-       # browser()
+{    
         m <- NULL
        
-        #pass in a new matrix into the function instead of having to call it all over again
+        #this method allows the calling environment to pass in a new matrix
+        #into the function instead of having to call it all over again
         set <- function(y) 
         {
+                #when set is called, we need to reset the main variables that
+                #hold the matrix and the inverted matrix
                 x <<- y
                 m <<- NULL
         }
@@ -22,28 +25,19 @@ makeCacheMatrix <- function(x = matrix())
         
         #uses the solve function on the original matrix to return the invesrse matrix
         getinverse <- function () 
-        {
-                print ("in getinverse function")
-                            
-                
+        { 
                 if(!is.null(m)) 
                 {
-                        message("getting cached matrix")
-                        #return(m)
+                        message("getting cached matrix, no need to create it")
+                        return (m)
                 }
                 else 
                 {
-                        print ("creatig the inverted matrix for the first time")
+                        message ("creating the inverted matrix for the first time")
                         m <<- solve(x)
+                        return(m)
                 }
-                
-               # print (m)
-                print ("done in getinverse")
-                
-                
-                #returns the inverse of the matrix x which was passed in
-                #m <<- solve(x)
-             return (m)
+        #end of getinverse        
         }
         
         #the list of methods to call on the function
@@ -54,26 +48,13 @@ makeCacheMatrix <- function(x = matrix())
 }
 
 
-## Write a short comment describing this function
 
+#cacheSolve returns an inverted matrix
 cacheSolve <- function(x, ...) 
 {
-
-     #  browser()
-        print ("in cachesolve, about to call getinv")
-       
-        
+        #get the inverted matrix
         m <- x$getinverse()
-       print ("in cachesolve, done in getinv")
-        
-        
-    #   if(!is.null(m)) 
-    #    {
-    #       message("getting cached matrix")
-          # return(m)
-    #    }
-    #   else {m <- x$getinverse()}
-       
+             
         #the data returns the original matrix that was passed in
         data <- x$get()
        
